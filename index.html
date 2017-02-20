@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="style2.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+ 
+<body>
+<h1 id="title"> Language Script Quiz </h1>
+<div id="sub"><p> Lets see how well you know the world...</p>
+</div>
+<div id="section2">
+<p class="item-1">Hello</p>
+<p class="item-2">안녕하세요</p>
+<p class="item-3">Hola</p>
+<p class="item-4">你好!</p>
+<p class="item-5">لسلام عليكم</p>
+<p class="item-6">नमस्ते</p>
+<p class="item-7">bonjour</p>
+<p class="item-8">こんにちは</p>
+<p class="item-9">привет</p>
+</div>
+<div id="play"><a href="#quizContainer" style="text-decoration:none; color:white;"> PLAY </a></div>
+<br>
+<div id="space"></div>
+ 
+ 
+<div class="quizContainer" id="quizContainer">
+ 
+  
+  <div class="question"></div><br>
+  <div class="choiceList"></div>
+  <div class="quizMessage"></div>
+  <div class="result"></div><br><br><br>
+  <div class="nextButton">Submit</div><br>
+  <div class="lastmessage">15 Questions</div>
+</div><!--End of container-->
+ 
+<div id="footer">
+<p> Creator: Talha Malik | Email: Contact@talhawmalik.com </p>
+<p> http://www.talhawmalik.com | https://www.github.com/talhawmalik</p>
+<p id="icons"> <a href="http://www.talhawmalik.com"><img src="\icon.jpg" alt="Homepage" style="width:30px;height:25px;"></a> | 
+<a href="https://www.github.com/talhawmalik"><img src="\githubwhite.png" alt="Github" style="width:30px;height:30px;"></a> | 
+<a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ"><img src="\youtube2.png" alt="Youtube" style="width:30px;height:30px;"></a></p>
+</div>
+ 
+<script>
+var questions = [{
+                question: "Bonjour",
+                choices: ["French", "Spanish", "Italian", "Dutch"],
+                correctAnswer: 0
+}, {
+                question: "こんにちは",
+                choices: ["Mandarin", "Lao", "Swahili", "Japanese"],
+                correctAnswer: 3
+}, {
+                question: "όνομα",
+                choices: ["Russian", "Latin", "Hebrew", "Greek"],
+                correctAnswer: 3
+}, {
+                question: "你好",
+                choices: ["Khmer", "Mandarin", "Korean", "Hindi"],
+                correctAnswer: 1
+}, {
+                question: "한글",
+                choices: ["Marathi", "Javanese", "Hindi", "Korean"],
+                correctAnswer: 2
+}, {
+                question: "አዎ",
+                choices: ["Amharic", "Maldivian", "Dzongkha", "Javanese"],
+                correctAnswer: 0
+}, {
+                question: "xin chào",
+                choices: ["Cantonese", "Mandarin", "Vietnamese", "English"],
+                correctAnswer: 2
+}, {
+                question: "დიახ",
+                choices: ["Dzongkha", "Macedonian", "Georgian", "Khmer"],
+                correctAnswer: 2
+}, {
+                question: "ਜਿੱਥੇ ਕਿ",
+                choices: ["Sinhalese", "Punjabi", "Malayalam", "Hindi"],
+                correctAnswer: 1
+}, {
+                question: "ಹೇಗೆ",
+                choices: ["Malayalam", "Lao", "Khmer", "Kannada"],
+                correctAnswer: 3
+}, {
+                question: "مرحبا",
+                choices: ["Arabic", "Swahili", "Urdu", "Berber"],
+                correctAnswer: 0
+}, {
+                question: "העלא",
+                choices: ["Arabic", "Aramaic", "Yiddish", "Berber"],
+                correctAnswer: 2
+}, {
+                question: "Geschäft",
+                choices: ["English", "German", "Hebrew", "Mandarin"],
+                correctAnswer: 1
+}, {
+                question: "ཕེབས་པར་དགའ་བསུ་ཞུ།",
+                choices: ["Malayalam", "Tibetian", "Thai", "Khmer"],
+                correctAnswer: 1
+}, {
+                question: "Há muito não te via!",
+                choices: ["Spanish", "Swedish", "Dutch", "Portuguese"],
+                correctAnswer: 3
+}];
+var currentQuestion = 0;
+var correctAnswers = 0;
+var quizOver = false;
+$(document).ready(function() {
+                // Displays initial question
+                displayCurrentQuestion();
+                $(this).find(".quizMessage").hide();
+                //Creates a next button, keeps score, mandates a choice
+                $(this).find(".nextButton").on("click", function() {
+                                if (!quizOver) {
+                                                value = $("input[type='radio']:checked").val();
+                                                if (value == undefined) {
+                                                                $(document).find(".quizMessage").text("Select an answer!");
+                                                                $(document).find(".quizMessage").show();
+                                                } else {
+                                                                $(document).find(".quizMessage").hide();
+                                                                if (value == questions[currentQuestion].correctAnswer) {
+                                                                                correctAnswers++;
+                                                                }
+                                                                //Goes to next question, displays score at end,
+                                                                currentQuestion++;
+                                                                if (currentQuestion < questions.length) {
+                                                                                displayCurrentQuestion();
+                                                                } else {
+                                                                                displayScore();
+                                                                                //Asks if user wants to play again
+                                                                                $(document).find(".nextButton").text("Try Again?");
+                                                                                quizOver = true;
+                                                                }
+                                                }
+                                } else {
+                                                quizOver = false;
+                                                $(document).find(".nextButton").text("Next Question");
+                                                resetQuiz();
+                                                displayCurrentQuestion();
+                                                hideScore();
+                                }
+                });
+});
+// Defines current question, choices, and choice length
+function displayCurrentQuestion() {
+                console.log("In display current Question");
+                var question = questions[currentQuestion].question;
+                var questionClass = $(document).find(".quizContainer > .question");
+                var choiceList = $(document).find(".quizContainer > .choiceList");
+                var numChoices = questions[currentQuestion].choices.length;
+                // Set the questionClass text to the current question
+                $(questionClass).text(question);
+                // Remove all current <li> elements (if any)
+                $(choiceList).find("li").remove();
+                var choice;
+                for (i = 0; i < numChoices; i++) {
+                                choice = questions[currentQuestion].choices[i];
+                                $('<li><input type="radio" value=' + i + ' name="dynradio" />' + choice + '</li>').appendTo(choiceList);
+                }
+}
+ 
+function resetQuiz() {
+                currentQuestion = 0;
+                correctAnswers = 0;
+                hideScore();
+}
+ 
+function displayScore() {
+                $(document).find(".quizContainer > .result").text("You Got: " + correctAnswers + " out of: " + questions.length);
+                $(document).find(".quizContainer > .result").show();
+}
+ 
+function hideScore() {
+                $(document).find(".result").hide();
+}
+</script>
+ 
+</body>
+</html>
